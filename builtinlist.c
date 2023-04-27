@@ -22,10 +22,10 @@ int builtinlist(program_datas *data)
 	};
 
 
-	for (succession = 0; options[succession].builtin != NULL; succession++)
+	for (succession = 0; options[succession].builtins != NULL; succession++)
 	{
 
-		if (string_compare(options[succession].builtin, data->command_in, 0))
+		if (string_compare(options[succession].builtins, data->command_in, 0))
 		{
 
 			return (options[succession].function(data));

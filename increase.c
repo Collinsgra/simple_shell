@@ -88,7 +88,7 @@ void xpand_subs(program_datas *data)
 	if (was_expanded)
 	{
 		free(data->in_putln);
-		data->in_putln = string_duplicate(line);
+		data->in_putln = string_dup(line);
 	}
 }
 

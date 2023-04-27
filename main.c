@@ -111,7 +111,7 @@ void loop_prom(char *prompt, program_datas *data)
 			_tokenizer(data);
 			if (data->toks[0])
 			{ 
-				error_code = execute(data);
+				error_code = run(data);
 				if (error_code != 0)
 					_print_error(error_code, data);
 			}

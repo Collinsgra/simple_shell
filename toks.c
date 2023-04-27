@@ -32,10 +32,10 @@ void _tokenizer(program_datas *data)
 		exit(errno);
 	}
 	i = 0;
-	data->toks[i] = string_dup(_strtok(data->in_putln, separater));
+	data->toks[i] = string_dup(str_tok(data->in_putln, separater));
 	data->command_in = string_dup(data->toks[0]);
 	while (data->toks[i++])
 	{
-		data->toks[i] = string_dup(_strtok(NULL, separater));
+		data->toks[i] = string_dup(str_tok(NULL, separater));
 	}
 }
