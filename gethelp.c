@@ -31,7 +31,7 @@ int _print_error(int errorcode, program_datas *data)
 {
 	char n_as_string[10] = {'\0'};
 
-	long_string((long) data->exec_counter, n_as_string, 10);
+	long_string((long) data->executables_counts, n_as_string, 10);
 
 	if (errorcode == 2 || errorcode == 3)
 	{
