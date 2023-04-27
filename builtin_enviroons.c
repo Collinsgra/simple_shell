@@ -5,7 +5,7 @@
  * @data: program's data structures
  * Return: 0 if success, or other number if declared args
  */
-int env_builtin(program_datas *data)
+int builtin_env(program_datas *data)
 {
 	int i;
 	char cpname[50] = {'\0'};
@@ -52,7 +52,7 @@ int env_builtin(program_datas *data)
  * @data: struct for the program's data
  * Return: 0 if success, or other number if declared args
  */
-int set_env_builtin(program_datas *data)
+int builtin_set_env(program_datas *data)
 {
 
 	if (data->toks[1] == NULL || data->toks[2] == NULL)
@@ -64,7 +64,11 @@ int set_env_builtin(program_datas *data)
 		return (5);
 	}
 
+<<<<<<< HEAD
 	env_get_key(data->toks[1], data->toks[2], data);
+=======
+	environ_get_key(data->toks[1], data->toks[2], data);
+>>>>>>> b9a41905300b768a721a4ec2518dcc1b7b5cbf74
 
 	return (0);
 }
@@ -74,7 +78,7 @@ int set_env_builtin(program_datas *data)
  * @data: program's data structures
  * Return: ..
  */
-int unset_env_builtin(program_datas *data)
+int builtin_unset_env(program_datas *data)
 {
 
 	if (data->toks[1] == NULL)

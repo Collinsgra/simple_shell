@@ -11,7 +11,7 @@ int _print(char *string)
 	return (write(STDOUT_FILENO, string, string_length(string)));
 }
 /**
- * _printe - writes chars[] in stderror
+ * _printp - writes chars[] in stderror
  * @string: ptr to the chars[]
  * Return: num of bytes writed |
  * On error, -1 is returned, and errno is set well
@@ -31,39 +31,39 @@ int _print_error(int errorcode, program_datas *data)
 {
 	char n_as_string[10] = {'\0'};
 
-	long_to_string((long) data->exec_counter, n_as_string, 10);
+	long_string((long) data->exec_counter, n_as_string, 10);
 
 	if (errorcode == 2 || errorcode == 3)
 	{
-		_printe(data->name_progr);
-		_printe(": ");
-		_printe(n_as_string);
-		_printe(": ");
-		_printe(data->toks[0]);
+		_printp(data->name_progr);
+		_printp(": ");
+		_printp(n_as_string);
+		_printp(": ");
+		_printp(data->toks[0]);
 		if (errorcode == 2)
-			_printe(": Number error: ");
+			_printp(": Number error: ");
 		else
-			_printe(": cannot cd to this ");
-		_printe(data->toks[1]);
-		_printe("\n");
+			_printp(": cannot cd to this ");
+		_printp(data->toks[1]);
+		_printp("\n");
 	}
 	else if (errorcode == 127)
 	{
-		_printe(data->name_progr);
-		_printe(": ");
-		_printe(n_as_string);
-		_printe(": ");
-		_printe(data->command_in);
-		_printe(": not available\n");
+		_printp(data->name_progr);
+		_printp(": ");
+		_printp(n_as_string);
+		_printp(": ");
+		_printp(data->command_in);
+		_printp(": not available\n");
 	}
 	else if (errorcode == 126)
 	{
-		_printe(data->name_progr);
-		_printe(": ");
-		_printe(n_as_string);
-		_printe(": ");
-		_printe(data->command_in);
-		_printe(": Access denied\n");
+		_printp(data->name_progr);
+		_printp(": ");
+		_printp(n_as_string);
+		_printp(": ");
+		_printp(data->command_in);
+		_printp(": Access denied\n");
 	}
 	return (0);
 }
