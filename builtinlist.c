@@ -8,14 +8,16 @@
 int builtinlist(program_datas *data)
 {
 	int succession;
-	builtins options[] = {
-		{"exit", exit_builtin},
-		{"help", help_builtin},
-		{"cd", cd_builtin},
-		{"alias", alias_builtin},
-		{"env", env_builtin},
-		{"setenv", set_env_builtin},
-		{"unsetenv", unset_env_builtin},
+	_builtins options[] = {
+
+
+		{"exit", builtin_exit},
+		{"help", builtin_help},
+		{"cd", builtin_cd},
+		{"alias", builtin_alias},
+		{"env", builtin_env},
+		{"setenv", builtin_set_env},
+		{"unsetenv", builtin_unset_env},
 		{NULL, NULL}
 	};
 

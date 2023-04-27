@@ -94,7 +94,7 @@ void loop_prom(char *prompt, program_datas *data)
 {
 	int error_code = 0, string_len = 0;
 
-	while (++(data->executables_count))
+	while (++(data->executables_counts))
 	{
 		_print(prompt);
 		error_code = string_len = _function(data);
@@ -108,8 +108,8 @@ void loop_prom(char *prompt, program_datas *data)
 		{
 			xpand_subs(data);
 			xpand_vars(data);
-			tokenize(data);
-			if (data->tokens[0])
+			_tokenizer(data);
+			if (data->toks[0])
 			{ 
 				error_code = execute(data);
 				if (error_code != 0)

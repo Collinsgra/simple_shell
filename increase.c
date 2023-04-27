@@ -8,7 +8,7 @@
  */
 void xpand_vars(program_datas *data)
 {
-	int i, m;
+	int i, n;
 	char line[BUFFER_SIZE] = {0}, increase[BUFFER_SIZE] = {'\0'}, *temp;
 
 	if (data->in_putln == NULL)

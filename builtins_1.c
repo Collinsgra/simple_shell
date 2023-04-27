@@ -5,7 +5,7 @@
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int exit_builtin(program_datas *data)
+int builtin_exit(program_datas *data)
 {
 	int i;
 
@@ -83,7 +83,7 @@ int set_work_directory(program_datas *data, char *new_dir)
 			errno = 2;
 			return (3);
 		}
-		environ_set_key("PWD", new_dir, data);
+		environ_get_key("PWD", new_dir, data);
 	}
 	environ_set_key("OLDPWD", old_dir, data);
 	return (0);
@@ -94,7 +94,7 @@ int set_work_directory(program_datas *data, char *new_dir)
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int help_builtin(program_datas *data)
+int builtin_help(program_datas *data)
 {
 	int i, length = 0;
 	char *text_display[6] = {NULL};

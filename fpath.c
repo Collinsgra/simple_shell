@@ -85,10 +85,10 @@ char **tokenize_path(program_datas *data)
 
 
 	i = 0;
-	toks[i] = string_dup(_strtok(PATH, ":"));
+	toks[i] = string_dup(str_tok(PATH, ":"));
 	while (toks[i++])
 	{
-		toks[i] = string_dup(_strtok(NULL, ":"));
+		toks[i] = string_dup(str_tok(NULL, ":"));
 	}
 
 	free(PATH);

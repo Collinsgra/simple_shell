@@ -87,21 +87,21 @@ void free_recurrent_data(program_datas *data);
 
 void free_all_data(program_datas *data);
 
-int exit_builtin(program_datas *data);
+int builtin_exit(program_datas *data);
 
-int cd_builtin(program_datas *data);
+int builtin_cd(program_datas *data);
 
 int set_work_directory(program_datas *data, char *new_dir);
 
-int help_builtin(program_datas *data);
+int builtin_help(program_datas *data);
 
-int alias_builtin(program_datas *data);
+int builtin_alias(program_datas *data);
 
-int env_builtin(program_datas *data);
+int builtin_env(program_datas *data);
 
-int set_env_builtin(program_datas *data);
+int builtin_set_env(program_datas *data);
 
-int unset_env_builtin(program_datas *data);
+int builtin_unset_env(program_datas *data);
 
 char *environ_get_key(char *name, program_datas *data);
 

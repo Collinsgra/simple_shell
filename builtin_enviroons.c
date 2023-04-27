@@ -22,7 +22,7 @@ int env_builtin(program_datas *data)
 			{
 				var_copy = string_dup(environ_get_key(cpname, data));
 				if (var_copy != NULL)
-					environ_set_key(cpname, data->toks[1] + i + 1, data);
+					environ_get_key(cpname, data->toks[1] + i + 1, data);
 
 
 				print_environ(data);
@@ -64,7 +64,7 @@ int set_env_builtin(program_datas *data)
 		return (5);
 	}
 
-	env_set_key(data->toks[1], data->toks[2], data);
+	env_get_key(data->toks[1], data->toks[2], data);
 
 	return (0);
 }
