@@ -104,7 +104,7 @@ int builtin_set_env(program_datas *data);
 int builtin_unset_env(program_datas *data);
 
 char *environ_get_key(char *name, program_datas *data);
-
+int environ_set_key(char *key, char *value, program_datas *data);
 int environ_remove_key(char *key, program_datas *data);
 
 void _pt_environs(program_datas *data);
@@ -118,30 +118,14 @@ int _print_error(int errorcode, program_datas *data);
 int string_length(char *string);
 
 char *string_dup(char *string);
-
-
 int string_compare(char *string1, char *string2, int number);
-
-
 char *string_concat(char *string1, char *string2);
-
 void string_rev(char *string);
-
-
 void long_string(long number, char *string, int base);
-
 int _atoi(char *s);
-
-
 int count_chars(char *string, char *character);
-
-
-
 int print_alias(program_datas *data, char *alias);
-
 char *get_alias(program_datas *data, char *alias);
-
 int set_alias(char *alias_string, program_datas *data);
-
 
 #endif

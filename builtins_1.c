@@ -135,11 +135,11 @@ int builtin_help(program_datas *data)
 }
 
 /**
- * builtin_alias - add, remove or show aliases
+ * builtin_alias - adding, take away or display aliases
  * @data: struct for the program's data
  * Return: zero if sucess, or other number if its declared in the arguments
  */
-int alias_builtin(program_datas *data)
+int builtin_alias(program_datas *data)
 {
 	int i = 0;
 
