@@ -83,9 +83,9 @@ int set_work_directory(program_datas *data, char *new_dir)
 			errno = 2;
 			return (3);
 		}
-		environ_get_key("PWD", new_dir, data);
+		environ_set_key("PWD", new_dir, data);
 	}
-	environ_get_key("OLDPWD", old_dir, data);
+	environ_set_key("OLDPWD", old_dir, data);
 	return (0);
 }
 
