@@ -13,7 +13,7 @@ int builtin_env(program_datas *data)
 
 
 	if (data->toks[1] == NULL)
-		print_environ(data);
+		_pt_environs(data);
 	else
 	{
 		for (i = 0; data->toks[1][i]; i++)
@@ -25,7 +25,7 @@ int builtin_env(program_datas *data)
 					environ_set_key(cpname, data->toks[1] + i + 1, data);
 
 
-				print_environ(data);
+				_pt_environs(data);
 				if (environ_get_key(cpname, data) == NULL)
 				{
 					_print(data->toks[1]);
