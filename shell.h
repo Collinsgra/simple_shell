@@ -20,7 +20,7 @@
  * @name_progr: the nameof executable
  * @in_putln: ptr to input read for _function
  * @command_in: first command typed in the commandline
- * @executables_counts: number of comands excecuted 
+ * @executables_counts: number of comands excecuted
  * @descrip: description to the command's input
  * @toks: tokens
  * @environs: environ's copy

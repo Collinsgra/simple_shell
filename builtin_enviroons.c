@@ -22,7 +22,7 @@ int builtin_env(program_datas *data)
 			{
 				var_copy = string_dup(environ_get_key(cpname, data));
 				if (var_copy != NULL)
-					environ_get_key(cpname, data->toks[1] + i + 1, data);
+					environ_set_key(cpname, data->toks[1] + i + 1, data);
 
 
 				print_environ(data);
@@ -48,7 +48,7 @@ int builtin_env(program_datas *data)
 }
 
 /**
- * builtin_set_env - ..
+ * builtin_set_env - builtin to set environment
  * @data: struct for the program's data
  * Return: 0 if success, or other number if declared args
  */
@@ -64,11 +64,7 @@ int builtin_set_env(program_datas *data)
 		return (5);
 	}
 
-<<<<<<< HEAD
-	env_get_key(data->toks[1], data->toks[2], data);
-=======
-	environ_get_key(data->toks[1], data->toks[2], data);
->>>>>>> b9a41905300b768a721a4ec2518dcc1b7b5cbf74
+	environ_set_key(data->toks[1], data->toks[2], data);
 
 	return (0);
 }
