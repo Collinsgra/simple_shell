@@ -1,112 +1,62 @@
 #include "shell.h"
 
 /**
- * xpand_vars - expanding variables
- * @data: a ptr to a structure of program's data
- *
- * Return: nothing, but sets errno.
+ **setMemory - fills mem
+ *@s:  pointer to mem
+ *@b: byte to vill *s with
+ *@n: the amount to be filled
+ *Return: (s) a pointer to mem
  */
-void xpand_vars(program_datas *data)
+char *setMemory(char *s, char b, unsigned int n)
 {
-	int i, n;
-	char line[BUFFER_SIZE] = {0}, increase[BUFFER_SIZE] = {'\0'}, *temp;
+	unsigned int i;
 
-	if (data->in_putln == NULL)
-		return;
-	buffer_add(line, data->in_putln);
-	for (i = 0; line[i]; i++)
-		if (line[i] == '#')
-			line[i--] = '\0';
-		else if (line[i] == '$' && line[i + 1] == '?')
-		{
-			line[i] = '\0';
-			long_string(errno, increase, 10);
-			buffer_add(line, increase);
-			buffer_add(line, data->in_putln + i + 2);
-		}
-		else if (line[i] == '$' && line[i + 1] == '$')
-		{
-			line[i] = '\0';
-			long_string(getpid(), increase, 10);
-			buffer_add(line, increase);
-			buffer_add(line, data->in_putln + i + 2);
-		}
-		else if (line[i] == '$' && (line[i + 1] == ' ' || line[i + 1] == '\0'))
-			continue;
-		else if (line[i] == '$')
-		{
-			for (n = 1; line[i + n] && line[i + n] != ' '; n++)
-				increase[n - 1] = line[i + n];
-			temp = environ_get_key(increase, data);
-			line[i] = '\0', increase[0] = '\0';
-			buffer_add(increase, line + i + n);
-			temp ? buffer_add(line, temp) : 1;
-			buffer_add(line, increase);
-		}
-	if (!string_compare(data->in_putln, line, 0))
-	{
-		free(data->in_putln);
-		data->in_putln = string_dup(line);
-	}
+	for (i = 0; i < n; i++)
+		s[i] = b;
+	return (s);
 }
 
 /**
- * xpand_subs - expands substitutes
- * @data: ptr to a structure of program's data
- *
- * Return: nothing, but sets errno.
+ * free_str_str - frees str
+ * @pp: stringx2
  */
-void xpand_subs(program_datas *data)
+void free_str_str(char **pp)
 {
-	int i, n, was_expanded = 0;
-	char line[BUFFER_SIZE] = {0}, increase[BUFFER_SIZE] = {'\0'}, *temp;
+	char **a = pp;
 
-	if (data->in_putln == NULL)
+	if (!pp)
 		return;
-
-	buffer_add(line, data->in_putln);
-
-	for (i = 0; line[i]; i++)
-	{
-		for (n = 0; line[i + n] && line[i + n] != ' '; n++)
-			increase[n] = line[i + n];
-		increase[n] = '\0';
-
-		temp = get_alias(data, increase);
-		if (temp)
-		{
-			increase[0] = '\0';
-			buffer_add(increase, line + i + n);
-			line[i] = '\0';
-			buffer_add(line, temp);
-			line[string_length(line)] = '\0';
-			buffer_add(line, increase);
-			was_expanded = 1;
-		}
-		break;
-	}
-	if (was_expanded)
-	{
-		free(data->in_putln);
-		data->in_putln = string_dup(line);
-	}
+	while (*pp)
+		free(*pp++);
+	free(a);
 }
 
 /**
- * buffer_add - add string at end
- * @buffer: to be filled
- * @string_add: string copied in buffer
- * Return: nothing, but sets errno.
+ * _realloc -  memory realloc
+ * @ptr: pointer to last malloc
+ * @prev_size: last block byte size 
+ * @brand_size: new block byte size
+ *
+ * Return: pointer.
  */
-int buffer_add(char *buffer, char *string_add)
+void *_realloc(void *ptr, unsigned int prev_size, unsigned int brand_size)
 {
-	int length, i;
+	char *p;
 
-	length = string_length(buffer);
-	for (i = 0; string_add[i]; i++)
-	{
-		buffer[length + i] = string_add[i];
-	}
-	buffer[length + i] = '\0';
-	return (length + i);
+	if (!ptr)
+		return (malloc(brand_size));
+	if (!brand_size)
+		return (free(ptr), NULL);
+	if (brand_size == prev_size)
+		return (ptr);
+
+	p = malloc(brand_size);
+	if (!p)
+		return (NULL);
+
+	prev_size = prev_size < brand_size ? prev_size : brand_size;
+	while (prev_size--)
+		p[prev_size] = ((char *)ptr)[prev_size];
+	free(ptr);
+	return (p);
 }

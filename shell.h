@@ -1,131 +1,181 @@
-#ifndef SHELL_H
-#define SHELL_H
-
+#ifndef _SHELL_H_
+#define _SHELL_H_
 
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stddef.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <limits.h>
 #include <fcntl.h>
-#include <signal.h>
 #include <errno.h>
-#include "prompts.h"
+
+
+#define READ_BUF_SIZE 1024
+#define WRITE_BUF_SIZE 1024
+#define BUF_FLUSH -1
+#define CMD_NORM	0
+#define CMD_OR		1
+#define CMD_AND		2
+#define CONVERT_LOWERCASE	1
+#define CONVERT_UNSIGNED	2
+#define USEgt_line 0
+#define USE_STRTOK 0
+#define HIST_FILE	".shell_history"
+#define HIST_MAX	4096
+extern char **environ;
 
 /**
- * struct data_s - struct for the program's data
- * @name_progr: the nameof executable
- * @in_putln: ptr to input read for _function
- * @command_in: first command typed in the commandline
- * @executables_counts: number of comands excecuted
- * @descrip: description to the command's input
- * @toks: tokens
- * @environs: environ's copy
- * @lists_one: arrays ptrs with subs.s
+ * struct liststr - linked list
+ * @num: number field
+ * @str: a string
+ * @next: points to next data
  */
-typedef struct data_s
+typedef struct liststr
 {
-	char *name_progr;
-	char *in_putln;
-	char *command_in;
-	int executables_counts;
-	int descrip;
-	char **toks;
-	char **environs;
-	char **alias_list;
-} program_datas;
-
+	int num;
+	char *str;
+	struct liststr *next;
+} list_t;
 
 /**
- * struct _builtins - structure for builtins
- * @builtin: name of builtin
- * @function: function for builtins
+ *struct passinfo - pointer function
+ *@arg: a strgenerated
+ *@argv: arrays str gene
+ *@path: a string path for current command
+ *@argc: arguments
+ *@line_count: errors
+ *@err_num: the error code for exit()s
+ *@totalLns_cnt_flag: if on count this line of input
+ *@fname: the program filename
+ *@env: linked list of env 
+ *@environ: ccopy of envir
+ *@history: the history data
+ *@alias: the alias data
+ *@env_changed: change enviro
+ *@status: return status
+ *@cmd_buf: pointer
+ *@command_typ_buffer: command type ||, &&, ;
+ *@readfd: fd to read
+ *@histcount: history
  */
-typedef struct _builtins
+typedef struct passinfo
 {
-	char *builtins;
-	int (*function)(program_datas *data);
-} _builtins;
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	unsigned int line_count;
+	int err_num;
+	int totalLns_cnt_flag;
+	char *fname;
+	list_t *env;
+	list_t *history;
+	list_t *alias;
+	char **environ;
+	int env_changed;
+	int status;
 
-void init_datas(program_datas *data, int arc, char *argv[], char **environs);
+	char **cmd_buf;
+	int command_typ_buffer;
+	int readfd;
+	int histcount;
+} info_t;
 
-/* infinite loop showing prompt*/
-void loop_prom(char *prompt, program_datas *data);
+#define INFO_INIT \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
+	0, 0, 0}
 
-/* Print prompt in newline */
-void manage_prom(int opr UNUSED);
+/**
+ *struct builtin - contains a builtins
+ *@type: builtins comm flags
+ *@func: functions
+ */
+typedef struct builtin
+{
+	char *type;
+	int (*func)(info_t *);
+} builtin_table;
 
-int _function(program_datas *data);
 
-int check_logic_ops(char *array_commands[], int i, char array_operators[]);
-
-void xpand_vars(program_datas *data);
-
-/* substitute  xpands */
-void xpand_subs(program_datas *data);
-
-int buffer_add(char *buffer, char *string_add);
-
-void _tokenizer(program_datas *data);
-
-char *str_tok(char *line, char *separ);
-
-int run(program_datas *data);
-
-int builtinlist(program_datas *data);
-
-char **tokenize_path(program_datas *data);
-
-int find_prog(program_datas *data);
-
-void free_array_of_pointers(char **directories);
-
-void free_recurrent_data(program_datas *data);
-
-void free_all_data(program_datas *data);
-
-int builtin_exit(program_datas *data);
-
-int builtin_cd(program_datas *data);
-
-int set_work_directory(program_datas *data, char *new_dir);
-
-int builtin_help(program_datas *data);
-
-int builtin_alias(program_datas *data);
-
-int builtin_env(program_datas *data);
-
-int builtin_set_env(program_datas *data);
-
-int builtin_unset_env(program_datas *data);
-
-char *environ_get_key(char *name, program_datas *data);
-int environ_set_key(char *key, char *value, program_datas *data);
-int environ_remove_key(char *key, program_datas *data);
-
-void _pt_environs(program_datas *data);
-
-int _print(char *string);
-
-int _printp(char *string);
-
-int _print_error(int errorcode, program_datas *data);
-
-int string_length(char *string);
-
-char *string_dup(char *string);
-int string_compare(char *string1, char *string2, int number);
-char *string_concat(char *string1, char *string2);
-void string_rev(char *string);
-void long_string(long number, char *string, int base);
-int _atoi(char *s);
-int count_chars(char *string, char *character);
-int print_alias(program_datas *data, char *alias);
-char *get_alias(program_datas *data, char *alias);
-int set_alias(char *alias_string, program_datas *data);
+int hsh(info_t *, char **);
+int builtin_checker_file(info_t *);
+void find_a_command(info_t *);
+void func_fork(info_t *);
+int cmd_cln(info_t *, char *);
+char *chars_clone(char *, int, int);
+char *check_path(info_t *, char *, char *);
+int loophsh(char **);
+void _eputs(char *);
+int _eputchar(char);
+int _putfd(char c, int fd);
+int _putsfd(char *str, int fd);
+int string__length(char *);
+int compare_string(char *, char *);
+char *starts_with(const char *, const char *);
+char *string_conc(char *, char *);
+char *copy_string(char *, char *);
+char *string_duplicate(const char *);
+void _puts(char *);
+int _putchar(char);
+char *copy_str(char *, char *, int);
+char *conc_str(char *, char *, int);
+char *chars_str(char *, char);
+char **string_to_words(char *, char *);
+char **string_to_words2(char *, char);
+char *setMemory(char *, char, unsigned int);
+void free_str_str(char **);
+void *_realloc(void *, unsigned int, unsigned int);
+int free_ptr(void **);
+int reciprocal(info_t *);
+int limiter_de_fe(char, char *);
+int _isalpha(int);
+int _atoi(char *);
+int error_asc(char *);
+void print_error(info_t *, char *);
+int printDal(int, int);
+char *changeNum(long int, int, int);
+void deleteComments(char *);
+int _shellexit(info_t *);
+int _shellcd(info_t *);
+int _shellhelp(info_t *);
+int shellHistory(info_t *);
+int shellAlias(info_t *);
+ssize_t gt_inpuutt(info_t *);
+int gt_line(info_t *, char **, size_t *);
+void ctrl_Handle(int);
+void wipeInfo(info_t *);
+void makeInformation(info_t *, char **);
+void allow_info(info_t *, int);
+char *gt_environ(info_t *, const char *);
+int shellenv(info_t *);
+int shellsetenv(info_t *);
+int shellunsetenv(info_t *);
+int multiply_list_of_env(info_t *);
+char **get_environ(info_t *);
+int unset_environ(info_t *, char *);
+int set_environ(info_t *, char *, char *);
+char *retr_history_doc(info_t *info);
+int write_history(info_t *info);
+int read_history(info_t *info);
+int make_list_of_history(info_t *info, char *buf, int totalLns_cnt);
+int reshuffle_hist(info_t *info);
+list_t *add_data(list_t **, const char *, int);
+list_t *add_poss_end(list_t **, const char *, int);
+size_t string_prt_st(const list_t *);
+int remove_data(list_t **, unsigned int);
+void free_list(list_t **);
+size_t list_len(const list_t *);
+char **stringList(list_t *);
+size_t listPrinted(const list_t *);
+list_t *dt_begins_at(list_t *, char *, char);
+ssize_t receiveData(list_t *, list_t *);
+int equal_to_chain(info_t *, char *, size_t *);
+void _checker(info_t *, char *, size_t *, size_t, size_t);
+int alias_displace(info_t *);
+int rep_variables(info_t *);
+int str_rep(char **, char *);
 
 #endif
